@@ -1,0 +1,9 @@
+namespace: k8s-prometheus
+resources:
+  - namespace.yaml
+  - rbac.yaml
+  - cluster-role.yaml
+  - cluster-role-binding.yaml
+  - prometheus.yaml
+  - service.yaml
+  - ingress.yaml

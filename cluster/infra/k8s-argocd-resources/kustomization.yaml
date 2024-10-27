@@ -1,0 +1,26 @@
+namespace: argocd
+resources:
+  - projects/databases.yaml
+  - projects/infra.yaml
+  - projects/messaging.yaml
+  - applications/databases-mongo-6.0.10.yaml
+  - applications/databases-mongo-7.0.14.yaml
+  - applications/databases-mongo-8.0.3.yaml
+  - applications/databases-redis-7.4.1-cluster.yaml
+  - applications/databases-redis-7.4.1-replication.yaml
+  - applications/databases-redis-7.4.1-standalone.yaml
+  - applications/k8s-argocd-resources.yaml
+  - applications/k8s-argocd.yaml
+  - applications/k8s-cadvisor.yaml
+  - applications/k8s-dashboard.yaml
+  - applications/k8s-grafana.yaml
+  - applications/k8s-ingress-controller.yaml
+  - applications/k8s-jumpbox.yaml
+  - applications/k8s-kube-state-metrics.yaml
+  - applications/k8s-metrics-server.yaml
+  - applications/k8s-monitoring-ingress-nginx.yaml
+  - applications/k8s-monitoring-kubelet.yaml
+  - applications/k8s-prometheus-node-exporter.yaml
+  - applications/k8s-prometheus-operator.yaml
+  - applications/k8s-prometheus.yaml
+  - applications/messaging-kafka-3.8.0.yaml

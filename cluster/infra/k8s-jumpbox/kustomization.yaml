@@ -1,0 +1,16 @@
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+  # Para não ter que ficar apagando a chave toda hora
+  - name: jumpbox-host-keys
+    files:
+      - ssh_host_ecdsa_key=host_keys/ssh_host_ecdsa_key
+      - ssh_host_ecdsa_key.pub=host_keys/ssh_host_ecdsa_key.pub
+      - ssh_host_ed25519_key=host_keys/ssh_host_ed25519_key
+      - ssh_host_ed25519_key.pub=host_keys/ssh_host_ed25519_key.pub
+      - ssh_host_rsa_key=host_keys/ssh_host_rsa_key
+      - ssh_host_rsa_key.pub=host_keys/ssh_host_rsa_key.pub
+      - sshd_config=host_keys/sshd_config
+resources:
+  - service.yaml
+  - deployment.yaml

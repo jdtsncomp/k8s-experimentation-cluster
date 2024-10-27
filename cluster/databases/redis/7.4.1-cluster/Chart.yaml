@@ -1,0 +1,8 @@
+apiVersion: v2
+name: redis-7.4.1-cluster
+appVersion: 7.4.1
+version: 11.0.6
+dependencies:
+  - name: redis-cluster
+    version: 11.0.6
+    repository: https://charts.bitnami.com/bitnami

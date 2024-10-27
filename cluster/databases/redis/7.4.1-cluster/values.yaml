@@ -1,0 +1,30 @@
+# Value Reference: https://artifacthub.io/packages/helm/bitnami/redis-cluster/11.0.6
+redis-cluster:
+  # Uncomment to connect from outside the cluster
+  # cluster:
+  #   # Folow instructions from artifact hub how to setup Redis OSS Cluster
+  #   #
+  #   # Requires: https://github.com/kubernetes-sigs/cloud-provider-kind ( 0.4.0 )
+  #   # kubectl label node k8sexperiments-control-plane node.kubernetes.io/exclude-from-external-load-balancers-
+  #   # ./cloud-provider-kind
+  #   externalAccess:
+  #     enabled: true
+  #     service:
+  #       loadBalancerIP:
+  #         - 172.21.0.8
+  #         - 172.21.0.9
+  #         - 172.21.0.7
+  #         - 172.21.0.10
+  #         - 172.21.0.6
+  #         - 172.21.0.11
+  password: "Ch@ngeMe"
+  persistence:
+    size: 512Mi
+  redis:
+    nodeSelector:
+      redis: "true"
+    resourcesPreset: nano
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true

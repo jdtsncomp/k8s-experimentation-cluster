@@ -1,0 +1,11 @@
+apiVersion: v2
+name: kafka-3.8.0
+appVersion: 3.8.0
+version: 0.0.1
+dependencies:
+  - name: kafka
+    version: 30.1.6
+    repository: https://charts.bitnami.com/bitnami
+  - name: akhq
+    version: 0.25.1
+    repository: https://akhq.io/

@@ -1,0 +1,94 @@
+# Value Reference: https://artifacthub.io/packages/helm/bitnami/kafka/30.1.6
+kafka:
+  extraConfig:
+    autoCreateTopicsEnable: "true"
+    defaultReplicationFactor: 2
+    offsetsTopicReplicationFactor: 2
+  listeners:
+    client:
+      protocol: PLAINTEXT
+    controller:
+      protocol: PLAINTEXT
+    interbroker:
+      protocol: PLAINTEXT
+    external:
+      protocol: PLAINTEXT
+  controller:
+    replicaCount: 3
+    persistence:
+      size: 2Gi
+    nodeSelector:
+      kafka: "true"
+    resourcesPreset: "medium"
+  # externalAccess:
+  #   enabled: true
+  #   controller:
+  #     service:
+  #       type: NodePort
+  #       nodePorts:
+  #         - 30091
+  #         - 30092
+  #   broker:
+  #     service:
+  #       type: NodePort
+  #       nodePorts:
+  #         - 30093
+  #         - 30094
+  metrics:
+    jmx:
+      enabled: true
+    serviceMonitor:
+      enabled: true
+
+# https://artifacthub.io/packages/helm/akhq/akhq/0.25.1
+akhq:
+  configuration:
+    micronaut:
+      security:
+        enabled: true
+        default-group: no-roles
+        token:
+          jwt:
+            signatures:
+              secret:
+                generator:
+                  # openssl rand -base64 32
+                  secret: XvD9qnastukEodUmihXa1T1ehHrNZmrWNjb/UmVUm74=
+    akhq:
+      audit:
+        enabled: true
+        cluster-id: kafka-3-8-0
+        topic-name: akhq-audit.1
+      security:
+        enabled: true
+        default-group: no-roles
+        basic-auth:
+          - username: admin
+            # echo -n "Ch@ngeMe" | sha256sum
+            password: 67fc28ecb5bb0d617a2ecd7eb8d4c001d75c59dfb369f47ad72b313025b9b758
+            groups:
+              - admin
+          - username: reader
+            # echo -n "Ch@ngeMe" | sha256sum
+            password: 67fc28ecb5bb0d617a2ecd7eb8d4c001d75c59dfb369f47ad72b313025b9b758
+            groups:
+              - reader
+      server:
+        access-log:
+          enabled: true
+          name: org.akhq.log.access
+      connections:
+        kafka-3-8-0:
+          properties:
+            bootstrap.servers: "kafka380-controller-0.kafka380-controller-headless.kafka380.svc.cluster.local:9092,kafka380-controller-1.kafka380-controller-headless.kafka380.svc.cluster.local:9092,kafka380-controller-2.kafka380-controller-headless.kafka380.svc.cluster.local:9092"
+  ingress:
+    enabled: true
+    portnumber: 8080
+    pathType: Prefix
+    hosts:
+      - akhq-kafka380-127-0-0-1.traefik.me
+    paths:
+      - /
+    tls:
+      - hosts:
+          - akhq-kafka380-127-0-0-1.traefik.me

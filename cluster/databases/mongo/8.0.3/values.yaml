@@ -1,0 +1,47 @@
+# Value Reference: https://artifacthub.io/packages/helm/bitnami/mongodb/16.1.1
+mongodb:
+  fullnameOverride: rs
+  architecture: replicaset
+  replicaCount: 3
+  persistence:
+    enabled: true
+    size: 2Gi
+    resourcePolicy: "Delete"
+  nodeSelector:
+    mongodb: "true"
+  resources:
+    limits:
+      cpu: 500m
+      ephemeral-storage: 512Mi
+      memory: 768Mi
+    requests:
+      cpu: 500m
+      ephemeral-storage: 50Mi
+      memory: 512Mi
+  service:
+    nameOverride: "dbs"
+  externalAccess:
+    # Enable to connect from outside the cluster
+    enabled: false
+    service:
+      type: NodePort
+      nodePorts:
+        - 37017
+        - 37018
+        - 37019
+    autoDiscovery:
+      enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  arbiter:
+    enabled: false
+  auth:
+    enabled: true
+    rootPassword: "Ch@ngeMe"
+    username: "application"
+    password: "Ch@ngeMe"
+    database: "application"
+    # openssl rand -base64 16
+    replicaSetKey: "dz3fb6OKpBpxtNapfI5kLQ=="

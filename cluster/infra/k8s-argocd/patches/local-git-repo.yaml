@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-repo-server
+spec:
+  template:
+    spec:
+      # securityContext:
+      #   fsGroup: 999
+      containers:
+        - name: argocd-repo-server
+          volumeMounts:
+            - mountPath: /tmp/k8sexperiments.git
+              name: local-k8sexperiments-git-repo
+              readOnly: true
+      volumes:
+        - name: local-k8sexperiments-git-repo
+          hostPath:
+            path: /tmp/k8sexperiments.git
+            type: Directory

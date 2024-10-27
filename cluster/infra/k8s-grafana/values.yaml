@@ -1,0 +1,51 @@
+grafana:
+  assertNoLeakedSecrets: false
+  grafana.ini:
+    server:
+      domain: grafana-127-0-0-1.traefik.me
+      root_url: https://grafana-127-0-0-1.traefik.me
+      enable_gzip: true
+      enforce_domain: true
+    analytics:
+      enabled: false
+      reporting_enabled: false
+      check_for_updates: false
+      check_for_plugin_updates: false
+  adminUser: admin
+  adminPassword: Ch@ngeMe
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true
+    hosts:
+      - grafana-127-0-0-1.traefik.me
+    tls:
+      - hosts:
+          - grafana-127-0-0-1.traefik.me
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - uid: c20e1ad8-4bd1-49d5-89c1-6d7796cac6af
+          name: Prometheus K8S Local
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://k8s-prometheus.k8s-prometheus.svc.cluster.local
+          basicAuth: false
+          isDefault: true
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: "default"
+          orgId: 1
+          folder: ""
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+  persistence:
+    enabled: true
+    size: 1Gi

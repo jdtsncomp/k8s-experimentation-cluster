@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: cadvisor-scrapper
+spec:
+  selector:
+    matchLabels:
+      name: cadvisor
+  namespaceSelector:
+    matchNames:
+      - k8s-cadvisor
+  podMetricsEndpoints:
+    - port: http

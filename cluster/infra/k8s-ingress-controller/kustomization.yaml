@@ -1,0 +1,48 @@
+namespace: ingress-nginx
+secretGenerator:
+  - name: ingress-nginx-default-tls
+    type: kubernetes.io/tls
+    files:
+      - tls.crt=fullchain.pem
+      - tls.key=privkey.pem
+    options:
+      disableNameSuffixHash: true
+resources:
+  - https://raw.githubusercontent.com/kubernetes/ingress-nginx/refs/tags/controller-v1.11.2/deploy/static/provider/kind/deploy.yaml
+patches:
+  - target:
+      version: v1
+      kind: Deployment
+      name: ingress-nginx-controller
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value:
+          --enable-ssl-passthrough=true
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value:
+          --default-ssl-certificate=ingress-nginx/ingress-nginx-default-tls
+      # Metrics
+      - op: add
+        path: /spec/template/spec/containers/0/ports/-
+        value:
+          name: metrics
+          containerPort: 10254
+          protocol: TCP
+      # --enable-metrics=false
+      - op: remove
+        path: /spec/template/spec/containers/0/args/9
+  # Metrics
+  - target:
+      version: v1
+      kind: Service
+      name: ingress-nginx-controller
+    patch: |-
+      - op: add
+        path: /spec/ports/-
+        value:
+          name: metrics
+          port: 10254
+          targetPort: metrics
+          protocol: TCP

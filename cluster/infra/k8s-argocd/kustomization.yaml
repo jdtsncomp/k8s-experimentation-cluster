@@ -1,0 +1,83 @@
+namespace: argocd
+resources:
+  - namespace.yaml
+  # Cuidado para não subir muito pois há um bug aberto
+  # https://github.com/argoproj/argo-cd/issues/19727
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.1/manifests/install.yaml
+  - ingress.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+  - name: argocd-server-tls
+    type: kubernetes.io/tls
+    files:
+      - tls.crt=fullchain.pem
+      - tls.key=privkey.pem
+patches:
+  - path: patches/local-git-repo.yaml
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: argocd-rbac-cm
+    patch: |-
+      - op: add
+        path: /data
+        value: 
+          policy.csv: |
+            g, root, role:admin
+          policy.default: role:readonly
+          scopes: '[groups, email]'
+  - target:
+      version: v1
+      kind: Role
+      name: argocd-server
+    patch: |-
+      - op: add
+        path: /rules/-
+        value:
+          apiGroups:
+          - ''
+          resources:
+          - 'pods/exec'
+          verbs:
+          - 'create'
+  - target:
+      version: v1
+      kind: ClusterRole
+      name: argocd-server
+    patch: |-
+      - op: add
+        path: /rules/-
+        value:
+          apiGroups:
+          - ''
+          resources:
+          - 'pods/exec'
+          verbs:
+          - 'create'
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: argocd-cm
+    patch: |-
+      - op: add
+        path: /data
+        value: 
+          accounts.root: login, apiKey
+          accounts.root.enabled: "true"
+          statusbadge.enabled: "true"
+          admin.enabled: "false"
+          exec.enabled: "true"
+          url: https://argocd-127-0-0-1.traefik.me
+  - target:
+      version: v1
+      kind: Secret
+      name: argocd-secret
+    patch: |-
+      - op: add
+        path: /data
+        value:
+          accounts.root.password: JDJhJDEwJGpmWmo3Q2J3blJLb2ovQmU3NW9Kby5hN0RwVk8xY3d5MnhCUU9xZ0hTalJxTG1sTkt5RmU2
+          accounts.root.passwordMtime: MjAyNC0xMC0yN1QyMDoyNjozNlo=
+          accounts.root.tokens: bnVsbA==
+          server.secretkey: NkZTendkS0Y4djRaK0RyalhYTnUzeGxkWk5CWjJ6YjRobndXK0hKTyttbz0=

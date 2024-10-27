@@ -1,0 +1,96 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  # Control Plane
+  - role: control-plane
+    labels:
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1a
+      ingress-ready: "true"
+    # To make port mapping easier
+    kubeadmConfigPatches:
+      - |
+        kind: ClusterConfiguration
+        apiServer:
+          extraArgs:
+            "service-node-port-range": "30000-49999"
+    extraMounts:
+      - hostPath: .git
+        containerPath: /tmp/k8sexperiments.git
+        readOnly: true
+    extraPortMappings:
+      # Ingress Controller
+      - containerPort: 80
+        listenAddress: "127.0.0.1"
+        hostPort: 80
+      - containerPort: 443
+        listenAddress: "127.0.0.1"
+        hostPort: 443
+  # Worker
+  - role: worker
+    labels:
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1a
+      application: "true"
+      redis: "true"
+    extraMounts:
+      - hostPath: .git
+        containerPath: /tmp/k8sexperiments.git
+        readOnly: true
+    extraPortMappings:
+      # Redis
+      - containerPort: 36379
+        listenAddress: "127.0.0.1"
+        hostPort: 6379
+      - containerPort: 46379
+        listenAddress: "127.0.0.1"
+        hostPort: 16379
+  # Worker-2
+  - role: worker
+    labels:
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1b
+      application: "true"
+      ssh: "true"
+      kafka: "true"
+    extraMounts:
+      - hostPath: .git
+        containerPath: /tmp/k8sexperiments.git
+        readOnly: true
+    extraPortMappings:
+      # SSH
+      - containerPort: 30022
+        listenAddress: "127.0.0.1"
+        hostPort: 22222
+      # Kafka
+      - containerPort: 39092
+        listenAddress: "127.0.0.1"
+        hostPort: 9092
+      - containerPort: 39093
+        listenAddress: "127.0.0.1"
+        hostPort: 9093
+      - containerPort: 39094
+        listenAddress: "127.0.0.1"
+        hostPort: 9094
+  # Worker-3
+  - role: worker
+    labels:
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1c
+      application: "true"
+      mongodb: "true"
+    extraMounts:
+      - hostPath: .git
+        containerPath: /tmp/k8sexperiments.git
+        readOnly: true
+    extraPortMappings:
+      # MongoDB
+      - containerPort: 37017
+        listenAddress: "127.0.0.1"
+        hostPort: 27017
+      - containerPort: 37018
+        listenAddress: "127.0.0.1"
+        hostPort: 27018
+      - containerPort: 37019
+        listenAddress: "127.0.0.1"
+        hostPort: 27019

@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-grafana
+  namespace: argocd
+spec:
+  destination:
+    namespace: grafana
+    server: https://kubernetes.default.svc
+  project: infra
+  source:
+    path: cluster/infra/k8s-grafana
+    repoURL: file:///tmp/k8sexperiments.git
+    targetRevision: HEAD
+    helm:
+      fileParameters:
+        - path: dashboards/ingress-nginx-controller.json
+          name: grafana.dashboards.default.ingress-nginx-controller.json
+        - path: dashboards/node-exporter.json
+          name: grafana.dashboards.default.node-exporter.json
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

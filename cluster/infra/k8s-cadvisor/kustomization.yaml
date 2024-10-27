@@ -1,0 +1,6 @@
+namespace: k8s-cadvisor
+resources:
+  - https://raw.githubusercontent.com/google/cadvisor/refs/tags/v0.50.0/deploy/kubernetes/base/namespace.yaml
+  - https://raw.githubusercontent.com/google/cadvisor/refs/tags/v0.50.0/deploy/kubernetes/base/daemonset.yaml
+  - https://raw.githubusercontent.com/google/cadvisor/refs/tags/v0.50.0/deploy/kubernetes/base/serviceaccount.yaml
+  - pod-monitor.yaml

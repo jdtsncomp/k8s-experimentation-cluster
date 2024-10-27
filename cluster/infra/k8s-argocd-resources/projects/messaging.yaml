@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: streaming-and-messaging
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  description: Streaming and Messaging
+  destinations:
+    - namespace: "*"
+      server: "*"
+  sourceRepos:
+    - "*"

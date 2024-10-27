@@ -1,0 +1,7 @@
+apiVersion: v2
+name: mongodb-replicaset-7.0.14
+version: 0.0.1
+dependencies:
+  - name: mongodb
+    version: 15.6.26
+    repository: https://charts.bitnami.com/bitnami

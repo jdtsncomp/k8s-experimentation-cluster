@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: infra
+  namespace: argocd
+spec:
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  description: Infraestrutura essencial para o Cluster
+  destinations:
+    - namespace: "*"
+      server: "*"
+  sourceRepos:
+    - "*"

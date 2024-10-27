@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis741cluster
+  namespace: argocd
+spec:
+  destination:
+    namespace: redis741cluster
+    server: https://kubernetes.default.svc
+  project: databases
+  source:
+    path: cluster/databases/redis/7.4.1-cluster
+    repoURL: file:///tmp/k8sexperiments.git
+    targetRevision: HEAD
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

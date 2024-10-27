@@ -1,0 +1,8 @@
+namespace: kube-system
+resources:
+  - https://raw.githubusercontent.com/kubernetes/kube-state-metrics/refs/tags/v2.13.0/examples/standard/cluster-role.yaml
+  - https://raw.githubusercontent.com/kubernetes/kube-state-metrics/refs/tags/v2.13.0/examples/standard/cluster-role-binding.yaml
+  - https://raw.githubusercontent.com/kubernetes/kube-state-metrics/refs/tags/v2.13.0/examples/standard/service-account.yaml
+  - https://raw.githubusercontent.com/kubernetes/kube-state-metrics/refs/tags/v2.13.0/examples/standard/deployment.yaml
+  - https://raw.githubusercontent.com/kubernetes/kube-state-metrics/refs/tags/v2.13.0/examples/standard/service.yaml
+  - service-monitor.yaml

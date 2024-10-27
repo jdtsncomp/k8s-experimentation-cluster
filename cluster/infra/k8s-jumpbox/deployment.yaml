@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jumpbox
+spec:
+  selector:
+    matchLabels:
+      app: jumpbox
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jumpbox
+    spec:
+      automountServiceAccountToken: false
+      initContainers:
+        - name: gen-host-keys-volume
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args: ["-c", "cp /ro-data/* /rw-data && chown -R 1001:1001 /rw-data"]
+          volumeMounts:
+            - name: host-keys-ro
+              mountPath: /ro-data
+            - name: host-keys-rw
+              mountPath: /rw-data
+      containers:
+        - name: jumpbox
+          # Latest to get security updates
+          image: lscr.io/linuxserver/openssh-server:latest
+          resources:
+            requests:
+              cpu: 250m
+              memory: 90Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          ports:
+            - containerPort: 2222
+          env:
+            - name: PUID
+              value: "1001"
+            - name: PGID
+              value: "1001"
+            - name: TZ
+              value: "America/Sao_Paulo"
+            - name: PASSWORD_ACCESS
+              value: "true"
+            - name: SUDO_ACCESS
+              value: "false"
+            - name: USER_NAME
+              value: "admin"
+            - name: USER_PASSWORD
+              value: "Ch@ngeMe"
+            - name: LOG_STDOUT
+              value: "true"
+          volumeMounts:
+            - mountPath: /home/admin
+              name: user-home
+            - mountPath: /config/ssh_host_keys
+              name: host-keys-rw
+      nodeSelector:
+        ssh: "true"
+      volumes:
+        - name: user-home
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: host-keys-rw
+          emptyDir:
+            sizeLimit: 10Mi
+        - name: host-keys-ro
+          secret:
+            secretName: jumpbox-host-keys
+            items:
+              - key: ssh_host_ecdsa_key
+                path: ssh_host_ecdsa_key
+                mode: 0600
+              - key: ssh_host_ecdsa_key.pub
+                path: ssh_host_ecdsa_key.pub
+                mode: 0644
+              - key: ssh_host_ed25519_key
+                path: ssh_host_ed25519_key
+                mode: 0600
+              - key: ssh_host_ed25519_key.pub
+                path: ssh_host_ed25519_key.pub
+                mode: 0644
+              - key: ssh_host_rsa_key
+                path: ssh_host_rsa_key
+                mode: 0600
+              - key: ssh_host_rsa_key.pub
+                path: ssh_host_rsa_key.pub
+                mode: 0644
+              - key: sshd_config
+                path: sshd_config
+                mode: 0644

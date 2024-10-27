@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mongodb6010
+  namespace: argocd
+spec:
+  destination:
+    namespace: mongo6010
+    server: https://kubernetes.default.svc
+  project: databases
+  source:
+    path: cluster/databases/mongo/6.0.10
+    repoURL: file:///tmp/k8sexperiments.git
+    targetRevision: HEAD
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,23 @@
+# Value Reference: https://artifacthub.io/packages/helm/bitnami/redis/20.2.1
+redis:
+  architecture: standalone
+  auth:
+    enabled: true
+    password: "Ch@ngeMe"
+  # Read-Write
+  master:
+    disableCommands: []
+    nodeSelector:
+      redis: "true"
+    persistence:
+      size: 512Mi
+    resourcesPreset: nano
+    # Uncomment to connect from outside the cluster
+    # service:
+    #   type: NodePort
+    #   nodePorts:
+    #     redis: "46379"
+  metrics:
+    enabled: true
+    podMonitor:
+      enabled: true

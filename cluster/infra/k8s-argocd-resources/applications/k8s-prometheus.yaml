@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-prometheus
+  namespace: argocd
+spec:
+  destination:
+    namespace: k8s-prometheus
+    server: https://kubernetes.default.svc
+  project: infra
+  source:
+    path: cluster/infra/k8s-prometheus
+    repoURL: file:///tmp/k8sexperiments.git
+    targetRevision: HEAD
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

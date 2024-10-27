@@ -1,0 +1,8 @@
+apiVersion: v2
+name: redis-7.4.1-replication
+appVersion: 7.4.1
+version: 20.2.1
+dependencies:
+  - name: redis
+    version: 20.2.1
+    repository: https://charts.bitnami.com/bitnami

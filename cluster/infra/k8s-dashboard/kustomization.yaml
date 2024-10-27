@@ -1,0 +1,27 @@
+namespace: kubernetes-dashboard
+resources:
+  - https://raw.githubusercontent.com/kubernetes/dashboard/refs/tags/v2.7.0/aio/deploy/recommended.yaml
+  - ingress.yaml
+  - service-account.yaml
+# Uncomment for anonymous access
+# patches:
+#   - target:
+#       version: v1
+#       kind: Deployment
+#       name: kubernetes-dashboard
+#     patch: |-
+#       - op: add
+#         path: /spec/template/spec/containers/0/args/-
+#         value:
+#           --enable-skip-login
+#   - target:
+#       version: v1
+#       kind: ClusterRoleBinding
+#       name: kubernetes-dashboard
+#     patch: |-
+#       - op: replace
+#         path: /roleRef/kind
+#         value: ClusterRole
+#       - op: replace
+#         path: /roleRef/name
+#         value: cluster-admin

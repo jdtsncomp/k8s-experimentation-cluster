@@ -1,0 +1,4 @@
+namespace: k8s-monitoring
+resources:
+  # https://raw.githubusercontent.com/kubernetes/ingress-nginx/refs/heads/main/deploy/grafana/dashboards/nginx.json
+  - service-monitor.yaml

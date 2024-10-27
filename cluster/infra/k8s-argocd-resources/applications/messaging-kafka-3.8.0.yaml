@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kafka380
+  namespace: argocd
+spec:
+  destination:
+    namespace: kafka380
+    server: https://kubernetes.default.svc
+  project: streaming-and-messaging
+  source:
+    path: cluster/messaging/kafka/3.8.0
+    repoURL: file:///tmp/k8sexperiments.git
+    targetRevision: HEAD
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
